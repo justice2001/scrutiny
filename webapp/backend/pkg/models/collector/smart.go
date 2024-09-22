@@ -20,9 +20,10 @@ type SmartInfo struct {
 		Type     string `json:"type"`
 		Protocol string `json:"protocol"`
 	} `json:"device"`
-	ModelName    string `json:"model_name"`
-	SerialNumber string `json:"serial_number"`
-	Wwn          struct {
+	ModelName     string `json:"model_name"`
+	ScsiModelName string `json:"scsi_model_name"`
+	SerialNumber  string `json:"serial_number"`
+	Wwn           struct {
 		Naa uint64 `json:"naa"`
 		Oui uint64 `json:"oui"`
 		ID  uint64 `json:"id"`
@@ -230,11 +231,14 @@ type SmartInfo struct {
 	NvmeSmartHealthInformationLog NvmeSmartHealthInformationLog `json:"nvme_smart_health_information_log"`
 
 	// SCSI Protocol Specific Fields
-	Vendor              string              `json:"vendor"`
-	Product             string              `json:"product"`
-	ScsiVersion         string              `json:"scsi_version"`
-	ScsiGrownDefectList int64               `json:"scsi_grown_defect_list"`
-	ScsiErrorCounterLog ScsiErrorCounterLog `json:"scsi_error_counter_log"`
+	Vendor                    string              `json:"vendor"`
+	Product                   string              `json:"product"`
+	ScsiVersion               string              `json:"scsi_version"`
+	ScsiGrownDefectList       int64               `json:"scsi_grown_defect_list"`
+	ScsiErrorCounterLog       ScsiErrorCounterLog `json:"scsi_error_counter_log"`
+	ScsiStartStopCycleCounter struct {
+		AccumulatedStartStopCycles int64 `json:"accumulated_start_stop_cycles"`
+	} `json:"scsi_start_stop_cycle_counter"`
 }
 
 // Capacity finds the total capacity of the device in bytes, or 0 if unknown.

@@ -107,7 +107,11 @@ func (sm *Smart) FromCollectorSmartInfo(wwn string, info collector.SmartInfo) er
 
 	//smart metrics
 	sm.Temp = info.Temperature.Current
-	sm.PowerCycleCount = info.PowerCycleCount
+	if info.Device.Protocol == pkg.DeviceProtocolScsi {
+		sm.PowerCycleCount = info.ScsiStartStopCycleCounter.AccumulatedStartStopCycles
+	} else {
+		sm.PowerCycleCount = info.PowerCycleCount
+	}
 	sm.PowerOnHours = info.PowerOnTime.Hours
 	if !info.SmartStatus.Passed {
 		sm.Status = pkg.DeviceStatusSet(sm.Status, pkg.DeviceStatusFailedSmart)

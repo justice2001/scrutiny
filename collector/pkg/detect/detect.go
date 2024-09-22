@@ -9,6 +9,7 @@ import (
 	"github.com/analogj/scrutiny/collector/pkg/common/shell"
 	"github.com/analogj/scrutiny/collector/pkg/config"
 	"github.com/analogj/scrutiny/collector/pkg/models"
+	"github.com/analogj/scrutiny/webapp/backend/pkg"
 	"github.com/analogj/scrutiny/webapp/backend/pkg/models/collector"
 	"github.com/sirupsen/logrus"
 )
@@ -77,7 +78,11 @@ func (d *Detect) SmartCtlInfo(device *models.Device) error {
 	//WWN: this is a serial number/world-wide number that will not change.
 	//DeviceType and DeviceName are already populated, however may change between collector runs (eg. config/host restart)
 	//InterfaceType:
-	device.ModelName = availableDeviceInfo.ModelName
+	if availableDeviceInfo.Device.Protocol == pkg.DeviceProtocolScsi {
+		device.ModelName = availableDeviceInfo.ScsiModelName
+	} else {
+		device.ModelName = availableDeviceInfo.ModelName
+	}
 	device.InterfaceSpeed = availableDeviceInfo.InterfaceSpeed.Current.String
 	device.SerialNumber = availableDeviceInfo.SerialNumber
 	device.Firmware = availableDeviceInfo.FirmwareVersion
